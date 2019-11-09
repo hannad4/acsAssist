@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ACS Assist</string>
+
+    <!-- open and close are needed for MainActivity.java (to create the ActionBarToggle) -->
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- To Do: Change app colors to adhere to accessibility -->
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="white">#ffffff</color>
+    <color name="darkGray">#6c6c6c</color>
+    <color name="colorAccent">#D81B60</color>
+</resources>

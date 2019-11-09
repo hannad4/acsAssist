@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--  To Do: Change menu items to appropriate items based on user feedback -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/drawerList">
+    <item android:id="@+id/startExercise" android:title="Start Exercise" android:icon="@drawable/ic_assessment_black_24dp"/>
+    <item android:id="@+id/viewHistory" android:title="View History" android:icon="@drawable/ic_history_black_24dp"/>
+    <item android:id="@+id/settings" android:title="Settings" android:icon="@drawable/ic_settings_black_24dp"/>
+</menu>

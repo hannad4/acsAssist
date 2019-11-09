@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:background="@color/darkGray"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Creating the profile picture placeholder -->
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/ic_account_circle_white_24dp" />
+
+    <!-- Creating the user name placeholder -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:text="Test User"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+    <!-- Creating the user email placeholder -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="testUser@test.com"
+        android:textColor="@color/white"
+         />
+
+</LinearLayout>
