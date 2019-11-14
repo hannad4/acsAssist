@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <FrameLayout
+        android:orientation="vertical"
+        android:id="@+id/flcontent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </FrameLayout>
+
 <!-- The navigation view will hold the drawer menu -->
 <!-- layout_gravity is started to make the menu be hidden on the left -->
     <com.google.android.material.navigation.NavigationView
