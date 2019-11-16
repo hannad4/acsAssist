@@ -1,12 +1,17 @@
 package com.seniorproject.acsAssistApp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.preference.PreferenceManager;
+
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -15,15 +20,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);                                                         // The content view is based on activity_main.xml
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        boolean darkToggle = sharedPreferences.getBoolean("dark_toggle", false);                // Utilize the toggle from the settings page to handle themeing
+        if (darkToggle) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);                   // Enable android night mode when toggle set
+        }
+
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        setContentView(R.layout.activity_main);                                                        // The content view is based on activity_main.xml
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer);                                                           // Finding the drawer (defined in activity_main.xml)
         NavigationView navigationView = findViewById(R.id.nav_view);                                  // Finding the navigation view (defined in activity_main.xml)
         navigationView.setNavigationItemSelectedListener(this);                                       // Setting a listener for the navigation view
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);         // Setting the toggle & adding a listener
         drawer.addDrawerListener(toggle);
         toggle.syncState();                                                                            // Sync the hamburger icon with the drawer status
@@ -84,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
     @Override
     public void onBackPressed() {                                                               // Close the drawer if the back icon is pressed
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -93,7 +105,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
 }
-
-
-

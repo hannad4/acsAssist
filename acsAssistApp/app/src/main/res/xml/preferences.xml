@@ -1,12 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBoxPreference
-        android:layout_width="wrap_content"
-        android:defaultValue="false"
-        android:key="checkbox_preference"
-        android:summary="Pls work"
-        android:title="I just want this to work " />
+    <PreferenceCategory
+        android:title="App Settings">
 
+        <SwitchPreference
+            android:key="dark_toggle"
+            android:defaultValue="false"
+            android:title="Dark Theme"
+            android:summary="Enable a dark UI for the app" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="Further Info">
+
+        <Preference
+            android:key="website_link"
+            android:title="About ACS Assist"
+            android:summary="Find more info about the project and team" />
+    </PreferenceCategory>
 
 </PreferenceScreen>
