@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);         // Setting the toggle & adding a listener
         drawer.addDrawerListener(toggle);
         toggle.syncState();                                                                            // Sync the hamburger icon with the drawer status
+        setTitle("Home");                                                                              // Manually set the title to "Home" bc of dark theme toggle bug
 
         if (savedInstanceState == null) {                                                              // Upon initial setup, home page should be shown
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

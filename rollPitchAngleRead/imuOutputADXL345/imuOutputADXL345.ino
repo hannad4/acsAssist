@@ -1,3 +1,5 @@
+//The following sketch is applicable for the ADXL345 Acceleromter
+
 #include <Wire.h>  // Wire library
 
 int ADXL345 = 0x53; // The ADXL345 sensor I2C address
@@ -47,21 +49,29 @@ void loop() {
   Wire.endTransmission(false);
   Wire.requestFrom(ADXL345, 6, true); // Read 6 registers total, each axis value is stored in 2 registers
   X_out = ( Wire.read() | Wire.read() << 8); // X-axis value
+   
   X_out = X_out / 256; //For a range of +-2g, we need to divide the raw values by 256, according to the datasheet
+  Serial.print("X is ");
+  Serial.println(X_out); 
   Y_out = ( Wire.read() | Wire.read() << 8); // Y-axis value
   Y_out = Y_out / 256;
+  Serial.print("Y is "); 
+  Serial.println(Y_out); 
   Z_out = ( Wire.read() | Wire.read() << 8); // Z-axis value
   Z_out = Z_out / 256;
+  Serial.print("Z is "); 
+  Serial.println(Z_out); 
+  Serial.println(""); 
   // Calculate Roll and Pitch (rotation around X-axis, rotation around Y-axis)
   roll = atan(Y_out / sqrt(pow(X_out, 2) + pow(Z_out, 2))) * 180 / PI;
   pitch = atan(-1 * X_out / sqrt(pow(Y_out, 2) + pow(Z_out, 2))) * 180 / PI;
   // Low-pass filter
   rollF = 0.941 * rollF + 0.06 * roll;
   pitchF = 0.941 * pitchF + 0.06 * pitch;
-  Serial.print(millis()/1000.0);
-  Serial.print(", ");  
-  Serial.print(rollF);
-  Serial.print(", ");
-  Serial.print(pitchF);
-  Serial.println(""); 
+//  Serial.print(millis()/1000.0);
+//  Serial.print(", ");  
+//  Serial.print(rollF);
+//  Serial.print(", ");
+//  Serial.print(pitchF);
+//  Serial.println(""); 
 }
