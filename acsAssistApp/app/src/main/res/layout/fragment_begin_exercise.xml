@@ -5,11 +5,58 @@
     android:layout_height="match_parent"
     tools:context=".BeginExercise">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="This is the begin exercise fragment"
-        android:textAlignment="center" />
+        android:layout_height="match_parent">
+
+        <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="55dp"
+            android:text="Select Exercise"
+            android:textAlignment="center"
+            android:textSize="35sp" />
+
+        <Button
+            android:id="@+id/exercise1Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="150dp"
+            android:text="Exercise 1"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/exercise2Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/exercise1Button"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="150dp"
+            android:text="Exercise 2"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/exercise3Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/exercise2Button"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="150dp"
+            android:text="Exercise 3"
+            android:textAlignment="center" />
+    </RelativeLayout>
+
 
 </FrameLayout>

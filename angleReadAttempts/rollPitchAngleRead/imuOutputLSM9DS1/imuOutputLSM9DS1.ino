@@ -32,8 +32,10 @@ void loop()
     pitch = atan(-1 * x / sqrt(pow(y, 2) + pow(z, 2))) * 180 / PI;
     rollF = 0.941 * rollF + 0.06 * roll; 
     pitchF = 0.941 * pitchF + 0.06 * pitch; 
+    Serial.print(millis()/1000.0); 
+    Serial.print(", "); 
     Serial.print(rollF); 
-    Serial.print("/"); 
+    Serial.print(", "); 
     Serial.print(pitchF); 
     Serial.println(""); 
   }
