@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.beginExercise: {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new BeginExercise()).commit();
-                setTitle("Begin Exercise");
+                setTitle("Exercise");
                 break;
             }
 

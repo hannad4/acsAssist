@@ -12,7 +12,7 @@ public class Home extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Toast toast = Toast.makeText(getActivity(),
-                "This proves that we can utilize the Home Fragment to perform whatever actions we desire for home",
+                "Home page coming soon!",
                 Toast.LENGTH_LONG);
         toast.show();
         super.onCreate(savedInstanceState);
