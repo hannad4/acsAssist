@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 // This is technically all we need initially to perform actions/viewable content per page
 public class BeginExercise extends Fragment {
 

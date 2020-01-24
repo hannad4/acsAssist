@@ -1,0 +1,6 @@
+{
+    "port": "COM6",
+    "programmer": "AVR ISP",
+    "board": "arduino:avr:nano",
+    "configuration": "cpu=atmega328"
+}

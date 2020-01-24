@@ -1,7 +1,20 @@
 #include <Arduino_LSM9DS1.h>
+#include <ArduinoBLE.h>
+#include <BLECharacteristic.h>
+#include <BLEDescriptor.h>
+#include <BLEDevice.h>
+#include <BLEProperty.h>
+#include <BLEService.h>
+#include <BLEStringCharacteristic.h>
+#include <BLETypedCharacteristic.h>
+#include <BLETypedCharacteristics.h>
 
-float x, y, z;
-float roll, pitch, rollF=0, pitchF=0;
+float accelX, accelY, accelZ; 
+float magX, magY, magZ, mag_x, mag_y;
+float roll, pitch, yaw, rollF=0, pitchF=0, posiRoll, posiPitch;
+
+BLEService angleService("1826"); 
+BLEFloatCharacteristic rollBLE("2A57", BLERead | BLENotify);
 
 void setup()
 {
@@ -10,34 +23,59 @@ void setup()
     Serial.println("Failed to initialize IMU!");
     exit(1);
   }
+  
+  if (!BLE.begin()) {
+    Serial.println("starting BLE failed!");
+    while (1);
+  }
+  
+  BLE.setLocalName("acsAssist");
+  BLE.setAdvertisedService(angleService); 
+  angleService.addCharacteristic(rollBLE); 
+  BLE.addService(angleService); 
+  rollBLE.writeValue(0); 
+  BLE.advertise(); 
 }
 
 void loop()
 {
-   
-
-  if (IMU.accelerationAvailable())
-  {
-    IMU.readAcceleration(x, y, z);
-
-    // Serial.print("X is ");
-    // Serial.println(x); 
-    // Serial.print("Y is ");
-    // Serial.println(y); 
-    // Serial.print("Z is ");
-    // Serial.println(z); 
-    // Serial.println(); 
+  BLEDevice central = BLE.central(); 
+  
+  if (central){
     
-    roll = atan(y / sqrt(pow(x, 2) + pow(z, 2))) * 180 / PI;
-    pitch = atan(-1 * x / sqrt(pow(y, 2) + pow(z, 2))) * 180 / PI;
-    rollF = 0.941 * rollF + 0.06 * roll; 
-    pitchF = 0.941 * pitchF + 0.06 * pitch; 
-    Serial.print(millis()/1000.0); 
-    Serial.print(", "); 
-    Serial.print(rollF); 
-    Serial.print(", "); 
-    Serial.print(pitchF); 
-    Serial.println(""); 
+    while (central.connected()) {
+      
+      if (IMU.accelerationAvailable() && IMU.magneticFieldAvailable()) {
+        IMU.readAcceleration(accelX, accelY, accelZ);
+        IMU.readMagneticField(magX, magY, magZ); 
+        
+        // Serial.print("X is ");
+        // Serial.println(magX); 
+        // Serial.print("Y is ");
+        // Serial.println(magY); 
+        // Serial.print("Z is ");
+        // Serial.println(magZ); 
+        // Serial.println(); 
+        
+        roll = atan(accelY / sqrt(pow(accelX, 2) + pow(accelZ, 2))) * 180 / PI;
+        pitch = atan(-1 * accelX / sqrt(pow(accelY, 2) + pow(accelZ, 2))) * 180 / PI;
+        rollF = 0.94 * rollF + 0.06 * roll; 
+        pitchF = 0.94 * pitchF + 0.06 * pitch; 
+        // mag_x = magX*cos(pitchF) + magY*sin(rollF)*sin(pitchF) + magZ*cos(rollF)*sin(pitchF);
+        // mag_y = magY * cos(rollF) - magZ * sin(rollF);
+        // yaw = 180 * atan2(-mag_y,mag_x)/M_PI;
+        posiRoll = rollF * -1; 
+        posiPitch = pitchF * -1; 
+        Serial.print("Time: ");
+        Serial.print(millis()/1000.0); 
+        // Serial.print(", "); 
+        Serial.print("       Roll: "); 
+        Serial.print(posiRoll); 
+        Serial.print(", Pitch: "); 
+        Serial.print(posiPitch); 
+        Serial.println(""); 
+        rollBLE.writeValue(posiRoll); 
+      }
+    }
   }
-
 }

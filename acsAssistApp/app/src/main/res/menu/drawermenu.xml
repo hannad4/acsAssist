@@ -11,5 +11,4 @@
        <item android:id="@+id/settings" android:title="Settings" android:icon="@drawable/ic_settings_black_24dp"/>
    </group>
 
-
 </menu>
