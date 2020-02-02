@@ -13,7 +13,7 @@ public class Home extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Toast toast = Toast.makeText(getActivity(),
                 "Home page coming soon!",
-                Toast.LENGTH_LONG);
+                Toast.LENGTH_SHORT);
         toast.show();
         super.onCreate(savedInstanceState);
     }
