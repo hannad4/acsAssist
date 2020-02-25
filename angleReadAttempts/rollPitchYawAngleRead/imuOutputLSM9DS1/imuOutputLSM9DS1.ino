@@ -5,17 +5,18 @@
 #include <BLEDevice.h>
 #include <BLEProperty.h>
 #include <BLEService.h>
-#include <BLEStringCharacteristic.h>
 #include <BLETypedCharacteristic.h>
 #include <BLETypedCharacteristics.h>
+#include <String.h>
 
 float accelX, accelY, accelZ;
 float magX, magY, magZ, mag_x, mag_y;
 float gyroX, gyroY, gyroZ;
-float roll, pitch, yaw, rollF = 0, pitchF = 0, posiRoll, posiPitch;
+float roll, pitch, yaw, rollF = 0, pitchF = 0, posiRoll, posiPitch;  
 
 BLEService angleService("1826");
-BLEFloatCharacteristic rollBLE("2A57", BLERead | BLENotify);
+BLEStringCharacteristic pitchBLE("78c5307a-6715-4040-bd50-d64db33e2e9e", BLERead | BLENotify, 20);
+BLEStringCharacteristic rollBLE("78c5307b-6715-4040-bd50-d64db33e2e9e", BLERead | BLENotify, 20);
 
 void setup()
 {
@@ -34,9 +35,12 @@ void setup()
 
   BLE.setLocalName("acsAssist");
   BLE.setAdvertisedService(angleService);
+  angleService.addCharacteristic(pitchBLE); 
   angleService.addCharacteristic(rollBLE);
+ 
   BLE.addService(angleService);
-  rollBLE.writeValue(0);
+  rollBLE.writeValue("0"); 
+  pitchBLE.writeValue("0");
   BLE.advertise();
 }
 
@@ -68,16 +72,18 @@ void loop()
         posiRoll = rollF * -1;
         posiPitch = pitchF * -1;
 
-        Serial.print("Time: ");
-        Serial.print(millis() / 1000.0);
+        //Serial.print("Time: ");
+        //Serial.print(millis() / 1000.0);
         // Serial.print(", ");
-        Serial.print("     Roll: ");
-        Serial.print(posiRoll);
-        Serial.print(",     Pitch: ");
-        Serial.print(posiPitch);
-        Serial.println(",     Yaw: ");
-        Serial.println(yaw);
-        rollBLE.writeValue(posiRoll);
+        //Serial.print("     Roll: ");
+        //Serial.print(posiRoll);
+        Serial.print("Pitch: ");
+        Serial.print(posiPitch); 
+        Serial.print("\n");
+        //Serial.println(",     Yaw: ");
+        //Serial.println(yaw);
+        rollBLE.writeValue(String(posiRoll)); 
+        pitchBLE.writeValue(String(posiPitch));
       }
     }
   }

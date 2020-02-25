@@ -13,50 +13,83 @@
 
         <TextView
             android:id="@+id/instructionText"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="55dp"
-            android:text="Select Exercise"
+            android:text="Connecting to acsAssist..."
             android:textAlignment="center"
-            android:textSize="35sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/exercise1Button"
+        <RadioGroup
+            android:id="@+id/exerciseButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="160dp"
-            android:text="Exercise 1"
-            android:textAlignment="center"
+            android:layout_marginBottom="200dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/instructionText"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/instructionText">
+
+            <RadioButton
+                android:id="@+id/exercise_1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:checked="true"
+                android:text="Exercise 1"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioButton
+                android:id="@+id/exercise_2"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Exercise 2"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioButton
+                android:id="@+id/exercise_3"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Exercise 3"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RadioGroup>
+
 
         <Button
-            android:id="@+id/exercise2Button"
+            android:id="@+id/beginExercise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Exercise 2"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/instructionText"
-            app:layout_constraintTop_toBottomOf="@+id/exercise1Button" />
-
-        <Button
-            android:id="@+id/exercise3Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Exercise 3"
+            android:text="BEGIN EXERCISE"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/instructionText"
             app:layout_constraintStart_toStartOf="@+id/instructionText"
-            app:layout_constraintTop_toBottomOf="@+id/exercise2Button"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/exerciseButtons"
+            app:layout_constraintVertical_bias="0.309" />
+
+        <Button
+            android:id="@+id/emergencyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STOP"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/instructionText"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="@+id/instructionText"
+            app:layout_constraintTop_toBottomOf="@+id/beginExercise" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
