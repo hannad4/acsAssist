@@ -42,7 +42,6 @@ public class BeginExercise extends Fragment {
     BluetoothDevice arduino = bluetoothAdapter.getRemoteDevice("E5:A5:53:32:BD:7C");
     Boolean showMeasurements = false;
 
-
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,7 +80,7 @@ public class BeginExercise extends Fragment {
             public void onClick(View v) {
                 int selectedExerciseID = exerciseButtons.getCheckedRadioButtonId();
                 RadioButton selectedExercise = currentView.findViewById(selectedExerciseID);
-                Log.i("BUTTON", String.valueOf(selectedExercise));
+                Log.i("DESCRIPTOR", String.valueOf(selectedExercise));
 
                 currentView.findViewById(R.id.exerciseButtons).setVisibility(View.INVISIBLE);
                 currentView.findViewById(R.id.beginExercise).setVisibility(View.INVISIBLE);
@@ -118,6 +117,8 @@ public class BeginExercise extends Fragment {
 
     private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
         List<BluetoothGattCharacteristic> chars = new ArrayList<>();
+        UUID pitchUUID = UUID.fromString("78c5307a-6715-4040-bd50-d64db33e2e9e");
+        UUID rollUUID = UUID.fromString("78c5307b-6715-4040-bd50-d64db33e2e9e");
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -129,7 +130,7 @@ public class BeginExercise extends Fragment {
                     break;
 
                 case BluetoothProfile.STATE_DISCONNECTED:
-                    instructionText.setText("acsAssist Disconnected");
+                    instructionText.setText("acsAssist Disconnected ");
                     break;
 
                 case BluetoothProfile.STATE_CONNECTING:
@@ -145,42 +146,29 @@ public class BeginExercise extends Fragment {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 for (BluetoothGattCharacteristic characteristic: gatt.getService(UUID.fromString("00001826-0000-1000-8000-00805f9b34fb")).getCharacteristics()) {
-                    gatt.setCharacteristicNotification(characteristic, true);
-                    BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"));
-                    descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                    gatt.writeDescriptor(descriptor);
                     chars.add(characteristic);
                 }
-
+                subscribeToCharacteristics(gatt);
             }
-            //requestCharacteristics(gatt);
         }
-        public void requestCharacteristics(BluetoothGatt gatt) {
-            gatt.readCharacteristic(chars.get(chars.size()-1));
+
+        private void subscribeToCharacteristics(BluetoothGatt gatt) {
+            if(chars.size() == 0) return;
+            BluetoothGattCharacteristic characteristic = chars.get(0);
+            gatt.setCharacteristicNotification(characteristic, true);
+            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"));
+            if(descriptor != null) {
+                descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                gatt.writeDescriptor(descriptor);
+            }
         }
 
         @Override
-        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            TextView instructionText = getView().findViewById(R.id.instructionText);
-            if(characteristic.getUuid().toString().equals("78c5307a-6715-4040-bd50-d64db33e2e9e")) {
-                instructionText.setText("lol");
-                Log.i("WOW", "Read Characteristic 1");
-            }
-            else if(characteristic.getUuid().toString().equals("78c5307b-6715-4040-bd50-d64db33e2e9e")) {
-                instructionText.setText("ok");
-                Log.i("WOW", "Read Characteristic 2");
-            }
-            chars.remove(chars.get(chars.size()-1));
-
-            if(chars.size() > 0) {
-                Log.i("WOW", "requested again");
-                requestCharacteristics(gatt);
-            }
-
-
-            if(showMeasurements) {
-//                instructionText.setText(characteristic.getStringValue(0));
-            }
+        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+            Log.i("DESCRIPTOR", "WROTE DESCRIPTOR FOR CHARACTERISTIC");
+            super.onDescriptorWrite(gatt, descriptor, status);
+            chars.remove(0);
+            subscribeToCharacteristics(gatt);
         }
 
         @Override
@@ -188,9 +176,10 @@ public class BeginExercise extends Fragment {
             super.onCharacteristicChanged(gatt, characteristic);
             TextView instructionText = getView().findViewById(R.id.instructionText);
             if(showMeasurements) {
-                instructionText.setText(characteristic.getStringValue(0));
+                if(characteristic.getUuid().equals(pitchUUID)) {
+                    instructionText.setText(characteristic.getStringValue(0));
+                }
             }
-
         }
     };
 }
