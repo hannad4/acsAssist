@@ -51,6 +51,9 @@ public class BeginExercise extends Fragment {
         final Button emergencyButton = currentView.findViewById(R.id.emergencyButton);
         Button beginExercise = currentView.findViewById(R.id.beginExercise);
         emergencyButton.setVisibility(View.INVISIBLE);
+        currentView.findViewById(R.id.rollLabel).setVisibility(View.INVISIBLE);
+        currentView.findViewById(R.id.pitchLabel).setVisibility(View.INVISIBLE);
+        currentView.findViewById(R.id.yawLabel).setVisibility(View.INVISIBLE);
 
         if (bluetoothAdapter == null) {                     // Bluetooth not supported
             Toast.makeText(getActivity(), "This device does not support Bluetooth! Use a Bluetooth enabled device.", Toast.LENGTH_LONG).show();
@@ -96,8 +99,12 @@ public class BeginExercise extends Fragment {
 
                     @Override
                     public void onFinish() {
-                        currentView.findViewById(R.id.emergencyButton).setVisibility(View.INVISIBLE);
                         showMeasurements = true;
+                        instructionText.setText("Begin exercise motion!");
+                        currentView.findViewById(R.id.emergencyButton).setVisibility(View.INVISIBLE);
+                        currentView.findViewById(R.id.rollLabel).setVisibility(View.VISIBLE);
+                        currentView.findViewById(R.id.pitchLabel).setVisibility(View.VISIBLE);
+                        currentView.findViewById(R.id.yawLabel).setVisibility(View.VISIBLE);
                     }
                 };
                 cTimer.start();
@@ -119,6 +126,7 @@ public class BeginExercise extends Fragment {
         List<BluetoothGattCharacteristic> chars = new ArrayList<>();
         UUID pitchUUID = UUID.fromString("78c5307a-6715-4040-bd50-d64db33e2e9e");
         UUID rollUUID = UUID.fromString("78c5307b-6715-4040-bd50-d64db33e2e9e");
+        UUID yawUUID = UUID.fromString("78c5307c-6715-4040-bd50-d64db33e2e9e");
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -130,6 +138,9 @@ public class BeginExercise extends Fragment {
                     break;
 
                 case BluetoothProfile.STATE_DISCONNECTED:
+                    getView().findViewById(R.id.rollLabel).setVisibility(View.INVISIBLE);
+                    getView().findViewById(R.id.pitchLabel).setVisibility(View.INVISIBLE);
+                    getView().findViewById(R.id.yawLabel).setVisibility(View.INVISIBLE);
                     instructionText.setText("acsAssist Disconnected ");
                     break;
 
@@ -174,10 +185,18 @@ public class BeginExercise extends Fragment {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-            TextView instructionText = getView().findViewById(R.id.instructionText);
+            TextView pitchText = getView().findViewById(R.id.pitchLabel);
+            TextView rollText = getView().findViewById(R.id.rollLabel);
+            TextView yawText = getView().findViewById(R.id.yawLabel);
             if(showMeasurements) {
                 if(characteristic.getUuid().equals(pitchUUID)) {
-                    instructionText.setText(characteristic.getStringValue(0));
+                    pitchText.setText("Pitch\n" + characteristic.getStringValue(0));
+                }
+                if(characteristic.getUuid().equals(rollUUID)) {
+                    rollText.setText("Roll\n" + characteristic.getStringValue(0));
+                }
+                if(characteristic.getUuid().equals(yawUUID)) {
+                    yawText.setText("Yaw\n" + characteristic.getStringValue(0));
                 }
             }
         }

@@ -12,11 +12,12 @@
 float accelX, accelY, accelZ;
 float magX, magY, magZ, mag_x, mag_y;
 float gyroX, gyroY, gyroZ;
-float roll, pitch, yaw, rollF = 0, pitchF = 0, posiRoll, posiPitch;  
+float roll, pitch, yaw, rollF = 0, pitchF = 0, yawF = 0, posiRoll, posiPitch, posiYaw;  
 
 BLEService angleService("1826");
 BLEStringCharacteristic pitchBLE("78c5307a-6715-4040-bd50-d64db33e2e9e", BLERead | BLENotify, 20);
 BLEStringCharacteristic rollBLE("78c5307b-6715-4040-bd50-d64db33e2e9e", BLERead | BLENotify, 20);
+BLEStringCharacteristic yawBLE("78c5307c-6715-4040-bd50-d64db33e2e9e", BLERead | BLENotify, 20);
 
 void setup()
 {
@@ -37,10 +38,12 @@ void setup()
   BLE.setAdvertisedService(angleService);
   angleService.addCharacteristic(pitchBLE); 
   angleService.addCharacteristic(rollBLE);
+  angleService.addCharacteristic(yawBLE); 
  
   BLE.addService(angleService);
   rollBLE.writeValue("0"); 
   pitchBLE.writeValue("0");
+  yawBLE.writeValue("0"); 
   BLE.advertise();
 }
 
@@ -67,10 +70,12 @@ void loop()
         pitchF = 0.94 * pitchF + 0.06 * pitch;
         
         yaw = yaw + gyroZ * 0.01;
+        yawF = 0.94 * yawF + 0.06 * yaw; 
         // yaw = 180 * atan2(-mag_y,mag_x)/M_PI;
         
         posiRoll = rollF * -1;
         posiPitch = pitchF * -1;
+        posiYaw = yawF * -1; 
 
         //Serial.print("Time: ");
         //Serial.print(millis() / 1000.0);
@@ -84,6 +89,7 @@ void loop()
         //Serial.println(yaw);
         rollBLE.writeValue(String(posiRoll)); 
         pitchBLE.writeValue(String(posiPitch));
+        yawBLE.writeValue(String(posiYaw)); 
       }
     }
   }
