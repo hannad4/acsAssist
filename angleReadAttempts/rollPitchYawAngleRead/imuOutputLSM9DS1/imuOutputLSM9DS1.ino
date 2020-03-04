@@ -8,12 +8,35 @@
 #include <BLETypedCharacteristic.h>
 #include <BLETypedCharacteristics.h>
 #include <String.h>
+#include <PID_v1.h> 
+#define initialThermistorResistance 10000 //Thermistor Resistance = 10k ohms 
+#define BetaValue 3950             // Beta Value of Thermistor 3950 K 
+#define Resistor 10000      // 10k Resistor for Voltage Divider 
+#define thermistorPin A0 
 
 float accelX, accelY, accelZ;
 float magX, magY, magZ, mag_x, mag_y;
 float gyroX, gyroY, gyroZ;
 float roll, pitch, yaw, rollF = 0, pitchF = 0, yawF = 0, posiRoll, posiPitch, posiYaw;  
-float temp = 43; 
+ 
+
+//Battery (Power Supply) Variables 
+float analogReading; 
+float initialBatteryVoltage; 
+float voltageRatio; 
+float finalBatteryVoltage; 
+
+//Declare Variables as Floats 
+float newThermistorResistance; 
+float voltageUnit;
+float voltageThermistor; 
+float thermistorReading; 
+float voltageNew; 
+float lnRTR0; 
+float tempInitial; 
+float tempFinal; 
+float convertedReading; 
+
 
 BLEService angleService("1826");
 BLEStringCharacteristic pitchBLE("78c5307a-6715-4040-bd50-d64db33e2e9e", BLERead | BLENotify, 20);
@@ -23,6 +46,7 @@ BLEStringCharacteristic temperature("78c5307d-6715-4040-bd50-d64db33e2e9e", BLER
 
 void setup()
 {
+  tempInitial = 273.15 + 25; 
   if (!IMU.begin())
   {
     Serial.println("Failed to initialize IMU!");
@@ -79,23 +103,29 @@ void loop()
         posiRoll = rollF * -1;
         posiPitch = pitchF * -1;
         posiYaw = yawF * -1; 
-        
-
-        //Serial.print("Time: ");
-        //Serial.print(millis() / 1000.0);
-        // Serial.print(", ");
-        //Serial.print("     Roll: ");
-        //Serial.print(posiRoll);
-        Serial.print("Pitch: ");
-        Serial.print(posiPitch); 
-        Serial.print("\n");
-        //Serial.println(",     Yaw: ");
-        //Serial.println(yaw);
         rollBLE.writeValue(String(posiRoll)); 
         pitchBLE.writeValue(String(posiPitch));
         yawBLE.writeValue(String(posiYaw)); 
-        temperature.writeValue(String(temp)); 
+        
+        analogReading = analogRead(A2); //Reading the power supply  
+        initialBatteryVoltage = analogReading * (3.33/1023.00); 
+        voltageRatio = 6.00; 
+        finalBatteryVoltage = initialBatteryVoltage * voltageRatio; 
+        voltageUnit = analogRead(A0); 
+        voltageThermistor = (3.33/1023.00) * voltageUnit; //Convert the analog value (0-1023 volts/unit) to a voltage (0-5V) using conversion factor 
+        //voltageNew = InputVoltage - voltageThermistor;
+        voltageNew = initialBatteryVoltage - voltageThermistor; 
+        newThermistorResistance = voltageThermistor / (voltageNew / Resistor);
+        thermistorReading = analogRead(thermistorPin); 
+        thermistorReading = (1023/thermistorReading) - 1; 
+        thermistorReading = Resistor / thermistorReading;  
+        lnRTR0 = log(newThermistorResistance / initialThermistorResistance);
+        tempFinal = (1 / ((lnRTR0 / BetaValue) + (1 / tempInitial))); //Temperature from thermistor using beta value 
+        tempFinal = (tempFinal - 273.15); //Conversion to Celsius 
+        temperature.writeValue(String(tempFinal)); 
       }
+      
+    
     }
   }
 }
