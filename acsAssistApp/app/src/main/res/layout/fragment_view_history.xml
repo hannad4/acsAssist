@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewHistory">
+    android:stretchColumns="1">
+    <TableRow>
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="This is the view history fragment"
-        android:textAlignment="center" />
+        <TextView
+            android:layout_width="150dp"
+            android:padding="3dip"
+            android:text="3/15/20"
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
-</FrameLayout>
+        <TextView
+            android:layout_width="33dp"
+            android:gravity="right"
+            android:padding="3dip"
+            android:text="Exercise 2"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:padding="3dip"
+            android:text="3/20/20"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="3dip"
+            android:text="Exercise 1"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+    </TableRow>
+</TableLayout>

@@ -31,16 +31,21 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class BeginExercise extends Fragment {
     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothDevice arduino = bluetoothAdapter.getRemoteDevice("E5:A5:53:32:BD:7C");
     Boolean showMeasurements = false;
+
 
     @Nullable
     @Override
@@ -54,6 +59,14 @@ public class BeginExercise extends Fragment {
         currentView.findViewById(R.id.rollLabel).setVisibility(View.INVISIBLE);
         currentView.findViewById(R.id.pitchLabel).setVisibility(View.INVISIBLE);
         currentView.findViewById(R.id.yawLabel).setVisibility(View.INVISIBLE);
+        currentView.findViewById(R.id.tempLabel).setVisibility(View.INVISIBLE);
+
+        Map<String, Object> angleData = new HashMap<>();
+
+//
+//
+//        db.collection("Patient Data").document("testUser").set(angleData);
+//        Log.i("DATABASE", String.valueOf(db));
 
         if (bluetoothAdapter == null) {                     // Bluetooth not supported
             Toast.makeText(getActivity(), "This device does not support Bluetooth! Use a Bluetooth enabled device.", Toast.LENGTH_LONG).show();
@@ -94,7 +107,8 @@ public class BeginExercise extends Fragment {
                 final CountDownTimer cTimer = new CountDownTimer(3000, 1000) {
                     @Override
                     public void onTick(long l) {
-                        instructionText.setText("Now Heating \n" +new SimpleDateFormat("mm:ss").format(new Date( l)));
+                        instructionText.setText("Now Heating \n" + new SimpleDateFormat("mm:ss").format(new Date(l)));
+                        currentView.findViewById(R.id.yawLabel).setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -105,6 +119,7 @@ public class BeginExercise extends Fragment {
                         currentView.findViewById(R.id.rollLabel).setVisibility(View.VISIBLE);
                         currentView.findViewById(R.id.pitchLabel).setVisibility(View.VISIBLE);
                         currentView.findViewById(R.id.yawLabel).setVisibility(View.VISIBLE);
+                        currentView.findViewById(R.id.tempLabel).setVisibility(View.VISIBLE);
                     }
                 };
                 cTimer.start();
@@ -127,6 +142,7 @@ public class BeginExercise extends Fragment {
         UUID pitchUUID = UUID.fromString("78c5307a-6715-4040-bd50-d64db33e2e9e");
         UUID rollUUID = UUID.fromString("78c5307b-6715-4040-bd50-d64db33e2e9e");
         UUID yawUUID = UUID.fromString("78c5307c-6715-4040-bd50-d64db33e2e9e");
+        UUID temperature = UUID.fromString("78c5307d-6715-4040-bd50-d64db33e2e9e");
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -185,18 +201,35 @@ public class BeginExercise extends Fragment {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
             TextView pitchText = getView().findViewById(R.id.pitchLabel);
             TextView rollText = getView().findViewById(R.id.rollLabel);
             TextView yawText = getView().findViewById(R.id.yawLabel);
+            TextView temp = getView().findViewById(R.id.tempLabel);
             if(showMeasurements) {
                 if(characteristic.getUuid().equals(pitchUUID)) {
                     pitchText.setText("Pitch\n" + characteristic.getStringValue(0));
+                    Map<String, Object> angleData = new HashMap<>();
+                    angleData.put("pitch", characteristic.getStringValue(0));
+                    db.collection("Patient Data").document("testUser").set(angleData);
                 }
                 if(characteristic.getUuid().equals(rollUUID)) {
                     rollText.setText("Roll\n" + characteristic.getStringValue(0));
+                    Map<String, Object> angleData = new HashMap<>();
+                    angleData.put("roll", characteristic.getStringValue(0));
+                    db.collection("Patient Data").document("testUser").set(angleData);
                 }
                 if(characteristic.getUuid().equals(yawUUID)) {
                     yawText.setText("Yaw\n" + characteristic.getStringValue(0));
+                    Map<String, Object> angleData = new HashMap<>();
+                    angleData.put("yaw", characteristic.getStringValue(0));
+                    db.collection("Patient Data").document("testUser").set(angleData);
+                }
+                if(characteristic.getUuid().equals(temperature)) {
+                    temp.setText("Temperature\n" + characteristic.getStringValue(0));
+                    Map<String, Object> tempData = new HashMap<>();
+                    tempData.put("temp", characteristic.getStringValue(0));
+                    db.collection("Patient Data").document("testUser").set(tempData);
                 }
             }
         }

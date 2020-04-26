@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "590099796083",
+    "firebase_url": "https://acs-assist.firebaseio.com",
+    "project_id": "acs-assist",
+    "storage_bucket": "acs-assist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590099796083:android:9e11362b5d3a11018ada06",
+        "android_client_info": {
+          "package_name": "com.seniorproject.acsAssistApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "590099796083-3kkl5q73fah7us2eblj8arqvlsk8mpaf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS9eltNHUZ9gvy8hrY4e-vOHGunMRmK_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "590099796083-3kkl5q73fah7us2eblj8arqvlsk8mpaf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
